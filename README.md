@@ -16,7 +16,7 @@ Clone the repo from github and install dependencies through npm.
 git clone https://github.com/abayo-luc/simple-job-applicaiton-app.git
 cd simple-job-application-app
 npm install
-HTTPS=true npm start
+npm start
 
 ```
 
