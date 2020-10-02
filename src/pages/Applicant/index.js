@@ -100,6 +100,9 @@ export const ApplicantPage = () => {
               ))}
             </Select>
           </Descriptions.Item>
+          <Descriptions.Item label="Comment">
+            {applicantData.comment}
+          </Descriptions.Item>
         </Descriptions>
       )}
       <div className="cv-container">
