@@ -49,7 +49,7 @@ export default ({ data, loading, refetch, count }) => {
           onChange: (value) => refetch(value),
           hideOnSinglePage: true,
           pageSize: 10,
-          total: count / 10,
+          total: count,
         }}
       />
     </div>
