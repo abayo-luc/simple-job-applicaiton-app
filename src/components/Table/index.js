@@ -38,8 +38,20 @@ const columns = [
   },
 ];
 
-export default ({ data, loading }) => (
-  <div className="container">
-    <Table columns={columns} dataSource={data} loading={loading} />
-  </div>
-);
+export default ({ data, loading, refetch, count }) => {
+  return (
+    <div className="container">
+      <Table
+        columns={columns}
+        dataSource={data}
+        loading={loading}
+        pagination={{
+          onChange: (value) => refetch(value),
+          hideOnSinglePage: true,
+          pageSize: 10,
+          total: count / 10,
+        }}
+      />
+    </div>
+  );
+};

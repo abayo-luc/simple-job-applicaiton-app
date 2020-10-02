@@ -89,7 +89,7 @@ export default () => {
         <Form.Item name={['cv']} label="CV" rules={[{ required: true }]}>
           <Input placeholder="https://bk-challenge-api.herokuapp.com/api" />
         </Form.Item>
-        <Form.Item name={['note']} label="Note">
+        <Form.Item name={['comment']} label="Leave a Comment">
           <Input.TextArea />
         </Form.Item>
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 4 }}>

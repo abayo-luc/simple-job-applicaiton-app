@@ -8,16 +8,18 @@ const { REACT_APP_API_BASE_URL } = process.env;
 export const ApplicantsPage = () => {
   const history = useHistory();
   const [loading, setLoading] = useState();
+  const [count, setCount] = useState(0);
   const [applicantsData, setApplicantsData] = useState([]);
   const [failed, setFailed] = useState(null);
-  const fetchData = () => {
+  const fetchData = (page = 1) => {
     setLoading(true);
-    return Axios.get(`${REACT_APP_API_BASE_URL}/applicants`)
+    return Axios.get(`${REACT_APP_API_BASE_URL}/applicants?page=${page}`)
       .then((res) => {
         const {
-          data: { rows },
+          data: { count, rows },
         } = res.data;
         setApplicantsData(rows);
+        setCount(count);
       })
       .catch((err) => {
         setFailed(true);
@@ -43,5 +45,12 @@ export const ApplicantsPage = () => {
       />
     );
   }
-  return <Table data={applicantsData} loading={loading} />;
+  return (
+    <Table
+      data={applicantsData}
+      loading={loading}
+      refetch={fetchData}
+      count={count}
+    />
+  );
 };
