@@ -1,6 +1,9 @@
+/* eslint-disable no-template-curly-in-string */
 import React, { useState } from 'react';
-import { Form, Input, InputNumber, Button } from 'antd';
-
+import { Form, Input, Button } from 'antd';
+import { useHistory } from 'react-router-dom';
+import Axios from 'axios';
+const { REACT_APP_API_BASE_URL } = process.env;
 const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 16 },
@@ -18,12 +21,36 @@ const validateMessages = {
 };
 
 export default () => {
+  const history = useHistory();
+  const [errors, setErrors] = useState(null);
+  const [isLoading, setLoading] = useState(false);
   const onFinish = (values) => {
-    console.log(values);
+    setLoading(true);
+    return Axios.post(`${REACT_APP_API_BASE_URL}/applicants`, values)
+      .then((res) => {
+        const { data } = res.data;
+        history.push(`/applicants/${data.id}`);
+      })
+      .catch((err) => {
+        const { message, errors } = err.response?.data || 'Validation error';
+        console.log(errors);
+        setErrors(errors || [{ message, path: 'general' }]);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
     <div className="applicant-form-container">
+      {errors && (
+        <div className="error-container">
+          Errors:
+          {errors.map((err) => (
+            <span key={err.path}>{err.message}</span>
+          ))}
+        </div>
+      )}
       <Form
         {...layout}
         // layout="vertical"
@@ -34,6 +61,7 @@ export default () => {
           name={['firstName']}
           label="First Name"
           rules={[{ required: true }]}
+          errors="hello"
         >
           <Input placeholder="John" />
         </Form.Item>
@@ -54,22 +82,18 @@ export default () => {
         <Form.Item
           name={['phoneNumber']}
           label="Phone Number"
-          rules={[{ type: 'phone', required: true }]}
+          rules={[{ required: true }]}
         >
           <Input placeholder="0789277275" />
         </Form.Item>
-        <Form.Item
-          name={['cv']}
-          label="CV"
-          rules={[{ type: 'link', required: true }]}
-        >
+        <Form.Item name={['cv']} label="CV" rules={[{ required: true }]}>
           <Input placeholder="https://bk-challenge-api.herokuapp.com/api" />
         </Form.Item>
-        <Form.Item name={['user', 'introduction']} label="Note">
+        <Form.Item name={['note']} label="Note">
           <Input.TextArea />
         </Form.Item>
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 4 }}>
-          <Button type="primary" block htmlType="submit">
+          <Button type="primary" block htmlType="submit" loading={isLoading}>
             Submit
           </Button>
         </Form.Item>
