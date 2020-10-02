@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, Tag, Space } from 'antd';
-
+import { Link } from 'react-router-dom';
+import { getStatusColor } from '../helpers';
 const columns = [
   {
     title: 'First Name',
@@ -22,7 +23,7 @@ const columns = [
     key: 'status',
     dataIndex: 'status',
     render: (status) => {
-      const color = 'geekblue';
+      const color = getStatusColor(status);
       return <Tag color={color}>{status.toUpperCase()}</Tag>;
     },
   },
@@ -31,38 +32,14 @@ const columns = [
     key: 'action',
     render: (text, record) => (
       <Space size="middle">
-        <a>View {record.name}</a>
+        <Link to={`/applicants/${record.id}`}>View</Link>
       </Space>
     ),
   },
 ];
 
-const data = [
-  {
-    key: '1',
-    firstName: 'John Brown',
-    lastName: 'Aba',
-    email: 'New York No. 1 Lake Park',
-    status: 'nice',
-  },
-  {
-    key: '2',
-    firstName: 'Jim Green',
-    lastName: 'Aba',
-    email: 'London No. 1 Lake Park',
-    status: 'loser',
-  },
-  {
-    key: '3',
-    firstName: 'Joe Black',
-    lastName: 'Aba',
-    email: 'Sidney No. 1 Lake Park',
-    status: 'cool',
-  },
-];
-
-export default () => (
+export default ({ data, loading }) => (
   <div className="container">
-    <Table columns={columns} dataSource={data} />
+    <Table columns={columns} dataSource={data} loading={loading} />
   </div>
 );
